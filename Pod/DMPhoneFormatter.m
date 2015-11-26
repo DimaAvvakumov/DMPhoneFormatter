@@ -42,118 +42,43 @@
     NSUInteger digitNumberLength = [digitNumber length];
     if (digitNumberLength == 0) return originalString;
     
-    if (digitNumberLength < 2 || digitNumberLength > 10) return originalString;
+    if (digitNumberLength < 2 || digitNumberLength > 11) return originalString;
     
     // vars
     unichar firstChar = [originalString characterAtIndex:0];
     BOOL firstIsPlus = (firstChar == '+') ? YES : NO;
+    unichar digit1 = [digitNumber characterAtIndex:0];
+    unichar digit2 = [digitNumber characterAtIndex:1];
     
-    // for two digits
-    if (digitNumberLength == 2) {
-        unichar digit1 = [digitNumber characterAtIndex:0];
-        unichar digit2 = [digitNumber characterAtIndex:1];
-        
-        BOOL firstExpr = NO;
-        if (firstIsPlus && digit1 == '7') {
-            firstExpr = YES;
-        }
-        if (NO == firstIsPlus && digit1 == '8') {
-            firstExpr = YES;
-        }
-        
-        if (firstExpr) {
-            NSRange range = NSMakeRange(startLocation, digitNumberLength);
-            NSString *formattedString = [NSString stringWithFormat:@"%c (%c  )", digit1, digit2];
-            originalString = [originalString stringByReplacingCharactersInRange:range withString:formattedString];
-        }
+    BOOL russianFormatting = NO;
+    if (firstIsPlus && digit1 == '7') {
+        russianFormatting = YES;
+    }
+    if (NO == firstIsPlus && digit1 == '8') {
+        russianFormatting = YES;
     }
     
-    // for three
-    if (digitNumberLength == 3) {
-        unichar digit1 = [digitNumber characterAtIndex:0];
-        unichar digit2 = [digitNumber characterAtIndex:1];
-        unichar digit3 = [digitNumber characterAtIndex:2];
-        
-        BOOL firstExpr = NO;
-        if (firstIsPlus && digit1 == '7') {
-            firstExpr = YES;
-        }
-        if (NO == firstIsPlus && digit1 == '8') {
-            firstExpr = YES;
+    if (russianFormatting) {
+        // insert "-"
+        if (digitNumberLength > 9) {
+            originalString = [originalString stringByReplacingCharactersInRange:NSMakeRange(startLocation + 9, 0) withString:@"-"];
         }
         
-        if (firstExpr) {
-            NSRange range = NSMakeRange(startLocation, digitNumberLength);
-            NSString *formattedString = [NSString stringWithFormat:@"%c (%c%c )", digit1, digit2, digit3];
-            originalString = [originalString stringByReplacingCharactersInRange:range withString:formattedString];
-        }
-    }
-    
-    // for four
-    if (digitNumberLength == 4) {
-        unichar digit1 = [digitNumber characterAtIndex:0];
-        unichar digit2 = [digitNumber characterAtIndex:1];
-        unichar digit3 = [digitNumber characterAtIndex:2];
-        unichar digit4 = [digitNumber characterAtIndex:3];
-        
-        BOOL firstExpr = NO;
-        if (firstIsPlus && digit1 == '7') {
-            firstExpr = YES;
-        }
-        if (NO == firstIsPlus && digit1 == '8') {
-            firstExpr = YES;
+        if (digitNumberLength > 7) {
+            originalString = [originalString stringByReplacingCharactersInRange:NSMakeRange(startLocation + 7, 0) withString:@"-"];
         }
         
-        if (firstExpr) {
-            NSRange range = NSMakeRange(startLocation, digitNumberLength);
-            NSString *formattedString = [NSString stringWithFormat:@"%c (%c%c%c)", digit1, digit2, digit3, digit4];
-            originalString = [originalString stringByReplacingCharactersInRange:range withString:formattedString];
-        }
-    }
-    
-    if (digitNumberLength == 5) {
-        unichar digit1 = [digitNumber characterAtIndex:0];
-        unichar digit2 = [digitNumber characterAtIndex:1];
-        unichar digit3 = [digitNumber characterAtIndex:2];
-        unichar digit4 = [digitNumber characterAtIndex:3];
-        unichar digit5 = [digitNumber characterAtIndex:3];
-        
-        BOOL firstExpr = NO;
-        if (firstIsPlus && digit1 == '7') {
-            firstExpr = YES;
-        }
-        if (NO == firstIsPlus && digit1 == '8') {
-            firstExpr = YES;
+        if (digitNumberLength > 4) {
+            originalString = [originalString stringByReplacingCharactersInRange:NSMakeRange(startLocation + 4, 0) withString:@" "];
         }
         
-        if (firstExpr) {
-            NSRange range = NSMakeRange(startLocation, digitNumberLength);
-            NSString *formattedString = [NSString stringWithFormat:@"%c (%c%c%c) %c", digit1, digit2, digit3, digit4, digit5];
-            originalString = [originalString stringByReplacingCharactersInRange:range withString:formattedString];
-        }
-    }
-    
-    if (digitNumberLength == 6) {
-        unichar digit1 = [digitNumber characterAtIndex:0];
-        unichar digit2 = [digitNumber characterAtIndex:1];
-        unichar digit3 = [digitNumber characterAtIndex:2];
-        unichar digit4 = [digitNumber characterAtIndex:3];
-        unichar digit5 = [digitNumber characterAtIndex:3];
-        unichar digit6 = [digitNumber characterAtIndex:3];
+        unichar digit3 = (digitNumberLength > 2) ? [digitNumber characterAtIndex:2] : ' ';
+        unichar digit4 = (digitNumberLength > 3) ? [digitNumber characterAtIndex:3] : ' ';
         
-        BOOL firstExpr = NO;
-        if (firstIsPlus && digit1 == '7') {
-            firstExpr = YES;
-        }
-        if (NO == firstIsPlus && digit1 == '8') {
-            firstExpr = YES;
-        }
-        
-        if (firstExpr) {
-            NSRange range = NSMakeRange(startLocation, digitNumberLength);
-            NSString *formattedString = [NSString stringWithFormat:@"%c (%c%c%c) %c%c", digit1, digit2, digit3, digit4, digit5, digit6];
-            originalString = [originalString stringByReplacingCharactersInRange:range withString:formattedString];
-        }
+        NSRange range = NSMakeRange(startLocation, MIN(4, [originalString length] - startLocation));
+        NSString *formattedString = [NSString stringWithFormat:@"%c (%c%c%c)", digit1, digit2, digit3, digit4];
+        originalString = [originalString stringByReplacingCharactersInRange:range withString:formattedString];
+
     }
     
     return originalString;

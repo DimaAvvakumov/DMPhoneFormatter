@@ -14,6 +14,7 @@
 		184703ED1C07096F00D11564 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 184703EC1C07096F00D11564 /* Assets.xcassets */; };
 		184703F01C07096F00D11564 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 184703EE1C07096F00D11564 /* LaunchScreen.storyboard */; };
 		184703FA1C0709A300D11564 /* DMPhoneFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 184703F91C0709A300D11564 /* DMPhoneFormatter.m */; };
+		184703FD1C0731EF00D11564 /* DMPhoneFormatterTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 184703FC1C0731EF00D11564 /* DMPhoneFormatterTextField.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,8 @@
 		184703F11C07096F00D11564 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		184703F81C0709A300D11564 /* DMPhoneFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMPhoneFormatter.h; sourceTree = "<group>"; };
 		184703F91C0709A300D11564 /* DMPhoneFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMPhoneFormatter.m; sourceTree = "<group>"; };
+		184703FB1C0731EF00D11564 /* DMPhoneFormatterTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMPhoneFormatterTextField.h; sourceTree = "<group>"; };
+		184703FC1C0731EF00D11564 /* DMPhoneFormatterTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMPhoneFormatterTextField.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +91,8 @@
 			children = (
 				184703F81C0709A300D11564 /* DMPhoneFormatter.h */,
 				184703F91C0709A300D11564 /* DMPhoneFormatter.m */,
+				184703FB1C0731EF00D11564 /* DMPhoneFormatterTextField.h */,
+				184703FC1C0731EF00D11564 /* DMPhoneFormatterTextField.m */,
 			);
 			path = Pod;
 			sourceTree = "<group>";
@@ -164,6 +169,7 @@
 			files = (
 				184703FA1C0709A300D11564 /* DMPhoneFormatter.m in Sources */,
 				184703E81C07096F00D11564 /* ViewController.m in Sources */,
+				184703FD1C0731EF00D11564 /* DMPhoneFormatterTextField.m in Sources */,
 				184703E51C07096F00D11564 /* AppDelegate.m in Sources */,
 				184703E21C07096F00D11564 /* main.m in Sources */,
 			);
