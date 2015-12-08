@@ -15,6 +15,7 @@
 		184703F01C07096F00D11564 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 184703EE1C07096F00D11564 /* LaunchScreen.storyboard */; };
 		184703FA1C0709A300D11564 /* DMPhoneFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 184703F91C0709A300D11564 /* DMPhoneFormatter.m */; };
 		184703FD1C0731EF00D11564 /* DMPhoneFormatterTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 184703FC1C0731EF00D11564 /* DMPhoneFormatterTextField.m */; };
+		187292441C16D10100F459E9 /* DMPhoneFormatterPresets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 187292431C16D10000F459E9 /* DMPhoneFormatterPresets.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		184703F91C0709A300D11564 /* DMPhoneFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMPhoneFormatter.m; sourceTree = "<group>"; };
 		184703FB1C0731EF00D11564 /* DMPhoneFormatterTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMPhoneFormatterTextField.h; sourceTree = "<group>"; };
 		184703FC1C0731EF00D11564 /* DMPhoneFormatterTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMPhoneFormatterTextField.m; sourceTree = "<group>"; };
+		187292431C16D10000F459E9 /* DMPhoneFormatterPresets.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DMPhoneFormatterPresets.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				184703F91C0709A300D11564 /* DMPhoneFormatter.m */,
 				184703FB1C0731EF00D11564 /* DMPhoneFormatterTextField.h */,
 				184703FC1C0731EF00D11564 /* DMPhoneFormatterTextField.m */,
+				187292431C16D10000F459E9 /* DMPhoneFormatterPresets.plist */,
 			);
 			path = Pod;
 			sourceTree = "<group>";
@@ -154,6 +157,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				187292441C16D10100F459E9 /* DMPhoneFormatterPresets.plist in Resources */,
 				184703F01C07096F00D11564 /* LaunchScreen.storyboard in Resources */,
 				184703ED1C07096F00D11564 /* Assets.xcassets in Resources */,
 				184703EB1C07096F00D11564 /* Main.storyboard in Resources */,
@@ -318,6 +322,7 @@
 				184703F61C07096F00D11564 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
