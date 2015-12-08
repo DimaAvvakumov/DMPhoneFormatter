@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "DMPhoneFormatter"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.summary      = "Helper for perform network requests"
   s.homepage     = "https://github.com/DimaAvvakumov/DMPhoneFormatter.git"
   s.license      = { :type => "MIT", :file => "LICENSE" }
