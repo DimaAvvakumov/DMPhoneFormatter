@@ -19,6 +19,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    [[DMPhoneFormatter defaultFormatter] setRegion:@"ru"];
+    
     NSArray *phones = @[
                         @"+79",
                         @"+790",
@@ -62,11 +64,12 @@
 }
 
 - (void)format:(NSString *)number {
-    DMPhoneFormatter *phoneFormatter = [[DMPhoneFormatter alloc] init];
-    NSInteger offset = 0;
+    DMPhoneFormatter *phoneFormatter = [DMPhoneFormatter defaultFormatter];
+    // NSInteger offset = 0;
     
     NSLog(@"Number: %@", number);
-    NSLog(@"Frmtdd: %@", [phoneFormatter autoFormat:number positionOffset:&offset]);
+    // NSLog(@"Frmtdd: %@", [phoneFormatter autoFormat:number positionOffset:&offset]);
+    NSLog(@"Frmtdd: %@", [phoneFormatter formatNumber:number]);
     NSLog(@" --- \n\n");
 }
 

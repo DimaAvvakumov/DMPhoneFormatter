@@ -12,7 +12,12 @@
 
 + (id)defaultFormatter;
 
-- (NSString *)autoFormat:(NSString *)phoneNumber positionOffset:(NSInteger *)offset;
+- (void)setRegion:(NSString*)region;
+
+- (NSString *)formatNumber:(NSString *)phoneNumber;
+
 - (NSString *) removeGarbageChars: (NSString *)originalString;
+
++ (BOOL) isDigitChar:(unichar)c;
 
 @end

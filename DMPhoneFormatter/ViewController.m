@@ -29,7 +29,6 @@
 - (IBAction)action:(id)sender {
     
     UITextPosition *startPosition = [self.textField positionFromPosition:[self.textField beginningOfDocument] offset:3];
-    UITextPosition *endPosition = [self.textField endOfDocument];
     UITextRange *textRange = [self.textField textRangeFromPosition:startPosition toPosition:startPosition];
     [self.textField setSelectedTextRange:textRange];
     

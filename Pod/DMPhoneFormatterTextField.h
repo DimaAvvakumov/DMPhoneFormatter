@@ -10,4 +10,6 @@
 
 @interface DMPhoneFormatterTextField : UITextField
 
+@property (copy,nonatomic) void (^changeBlock)(UITextField *textField);
+
 @end

@@ -8,6 +8,13 @@
 
 #import "DMPhoneFormatter.h"
 
+@interface DMPhoneFormatter()
+
+@property (strong, nonatomic) NSString *defaultRegion;
+@property (strong, nonatomic) NSDictionary *presets;
+
+@end
+
 @implementation DMPhoneFormatter
 
 + (id)defaultFormatter {
@@ -19,7 +26,21 @@
     return instance;
 }
 
-- (NSString *)autoFormat:(NSString *)phoneNumber positionOffset:(NSInteger *)offset {
+- (id)init{
+    self = [super init];
+    if (self == nil) return nil;
+    
+    self.defaultRegion = @"ru";
+    self.presets = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"DMPhoneFormatterPresets" ofType:@"plist"]];
+    
+    return self;
+}
+
+- (void)setRegion:(NSString*)region {
+    self.defaultRegion = region;
+}
+
+- (NSString *)formatNumber:(NSString *)phoneNumber {
     NSString *originalString = [self removeGarbageChars:phoneNumber];
     
     // original length
@@ -27,82 +48,93 @@
     
     // check length
     if (originalStringLength == 0) return phoneNumber;
-    
-    *offset = originalStringLength;
-    
-    NSMutableString *digitNumber = [NSMutableString stringWithCapacity:originalStringLength];
-    
-    BOOL digitWasFound = NO;
-    NSInteger startLocation = 0;
-    for (NSInteger i = 0; i < originalStringLength; i++) {
-        unichar c = [originalString characterAtIndex:i];
-        
-        if (c >= '0' && c <= '9') {
-            [digitNumber appendString:[NSString stringWithCharacters:&c length:1]];
-            
-            if (digitWasFound == NO) {
-                startLocation = i;
-            }
-            digitWasFound = YES;
-        } else if (digitWasFound) {
-            break;
-        }
-    }
-    
-    // check digitNumber length. If it 0, then nothing to analize
-    NSUInteger digitNumberLength = [digitNumber length];
-    if (digitNumberLength == 0) return originalString;
-    
-    if (digitNumberLength < 2 || digitNumberLength > 11) return originalString;
-    
-    // vars
-    unichar firstChar = [originalString characterAtIndex:0];
-    BOOL firstIsPlus = (firstChar == '+') ? YES : NO;
-    unichar digit1 = [digitNumber characterAtIndex:0];
-    unichar digit2 = [digitNumber characterAtIndex:1];
-    
-    BOOL russianFormatting = NO;
-    if (firstIsPlus && digit1 == '7') {
-        russianFormatting = YES;
-    }
-    if (NO == firstIsPlus && digit1 == '8') {
-        russianFormatting = YES;
-    }
-    
-    if (russianFormatting) {
-        // insert "-"
-        if (digitNumberLength > 9) {
-            originalString = [originalString stringByReplacingCharactersInRange:NSMakeRange(startLocation + 9, 0) withString:@"-"];
-        }
-        
-        if (digitNumberLength > 7) {
-            originalString = [originalString stringByReplacingCharactersInRange:NSMakeRange(startLocation + 7, 0) withString:@"-"];
-        }
-        
-        if (digitNumberLength > 4) {
-            originalString = [originalString stringByReplacingCharactersInRange:NSMakeRange(startLocation + 4, 0) withString:@" "];
-        }
-        
-        unichar digit3 = (digitNumberLength > 2) ? [digitNumber characterAtIndex:2] : ' ';
-        unichar digit4 = (digitNumberLength > 3) ? [digitNumber characterAtIndex:3] : ' ';
-        
-        NSRange range = NSMakeRange(startLocation, MIN(4, [originalString length] - startLocation));
-        NSString *formattedString = [NSString stringWithFormat:@"%c (%c%c%c)", digit1, digit2, digit3, digit4];
-        originalString = [originalString stringByReplacingCharactersInRange:range withString:formattedString];
 
-        // offset
-        if (digitNumberLength > 9) {
-            *offset = startLocation + digitNumberLength + 6;
-        } else if (digitNumberLength > 7) {
-            *offset = startLocation + digitNumberLength + 5;
-        } else if (digitNumberLength > 4) {
-            *offset = startLocation + digitNumberLength + 4;
-        } else {
-            *offset = startLocation + digitNumberLength + 2;
+    NSArray *allPresets = [self.presets objectForKey:@"all"];
+    for (NSString *preset in allPresets) {
+        NSString *formattedString = [self applyPreset:preset forString:originalString];
+        
+        if (formattedString) {
+            return formattedString;
+        }
+    }
+    
+    NSArray *regionPresets = [self.presets objectForKey:self.defaultRegion];
+    if (regionPresets == nil) return originalString;
+    
+    for (NSString *preset in regionPresets) {
+        NSString *formattedString = [self applyPreset:preset forString:originalString];
+        
+        if (formattedString) {
+            return formattedString;
         }
     }
     
     return originalString;
+}
+
+- (NSString *)applyPreset:(NSString *)preset forString:(NSString *)originalString {
+    
+    NSInteger presetLength = [preset length];
+    NSInteger countDigit = 0;
+    NSMutableArray *offsetOfDigit = [NSMutableArray arrayWithCapacity:presetLength];
+    NSMutableString *pattern = [NSMutableString stringWithCapacity:presetLength * 10];
+    
+    [pattern appendString:@"^"];
+    for (int i = 0; i < presetLength; i++) {
+        unichar c = [preset characterAtIndex:i];
+        
+        if ([DMPhoneFormatter isDigitChar:c]) {
+            [offsetOfDigit addObject:@(i)];
+            
+            if (c == '#') {
+                [pattern appendString:@"([0-9]{1})"];
+            } else {
+                NSString *add = [NSString stringWithFormat:@"([%@]{1})", [NSString stringWithCharacters:&c length:1]];
+                
+                [pattern appendString:add];
+            }
+            
+            countDigit++;
+        }
+    }
+    [pattern appendString:@"$"];
+    
+    NSError *error = nil;
+    NSRegularExpression *regExp = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+    if (error) {
+        NSLog(@"RegExp error: %@", error);
+        
+        return nil;
+    }
+    
+    NSTextCheckingResult *result = [regExp firstMatchInString:originalString options:0 range:NSMakeRange(0, originalString.length)];
+    if (result == nil) return nil;
+    
+    NSString *formattedString = preset;
+    for (int i = 0; i < countDigit; i++) {
+        NSNumber *offset = [offsetOfDigit objectAtIndex:i];
+        NSRange range = NSMakeRange([offset integerValue], 1);
+        NSRange rangeFromOriginal = [result rangeAtIndex:(i+1)];
+        NSString *digit = [originalString substringWithRange:rangeFromOriginal];
+        
+        formattedString = [formattedString stringByReplacingCharactersInRange:range withString:digit];
+    }
+    
+    return formattedString;
+}
+
++ (BOOL) isDigitChar:(unichar)c {
+    if (c >= '0' && c <= '9') {
+        return YES;
+    } else if (c == '+') {
+        return YES;
+    } else if (c == '*' || c == '#') {
+        return YES;
+    } else if (c == ',' || c == ';') {
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (NSString *) removeGarbageChars: (NSString *)originalString {
@@ -116,17 +148,7 @@
     for (NSInteger i = 0; i < originalStringLength; i++) {
         unichar c = [originalString characterAtIndex:i];
         
-        BOOL insert = NO;
-        
-        if (c >= '0' && c <= '9') {
-            insert = YES;
-        } else if (c == '+') {
-            insert = YES;
-        } else if (c == '*' || c == '#') {
-            insert = YES;
-        } else if (c == ',' || c == ';') {
-            insert = YES;
-        }
+        BOOL insert = [DMPhoneFormatter isDigitChar:c];
         
         if (insert) {
             [cleanString appendString:[NSString stringWithCharacters:&c length:1]];
