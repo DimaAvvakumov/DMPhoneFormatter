@@ -13,5 +13,6 @@ Pod::Spec.new do |s|
   s.public_header_files = "Pod/*.{h,m}"
   s.framework    = "UIKit"
   s.requires_arc = true
+  s.resources    = 'Pod/DMPhoneFormatterPresets.plist'
 
 end
