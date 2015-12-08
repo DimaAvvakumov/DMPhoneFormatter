@@ -10,7 +10,16 @@
 
 @implementation DMPhoneFormatter
 
-- (NSString *)autoFormat:(NSString *)phoneNumber {
++ (id)defaultFormatter {
+    static dispatch_once_t once;
+    static id instance;
+    dispatch_once(&once, ^{
+        instance = [self new];
+    });
+    return instance;
+}
+
+- (NSString *)autoFormat:(NSString *)phoneNumber positionOffset:(NSInteger *)offset {
     NSString *originalString = [self removeGarbageChars:phoneNumber];
     
     // original length
@@ -18,6 +27,8 @@
     
     // check length
     if (originalStringLength == 0) return phoneNumber;
+    
+    *offset = originalStringLength;
     
     NSMutableString *digitNumber = [NSMutableString stringWithCapacity:originalStringLength];
     
@@ -79,6 +90,16 @@
         NSString *formattedString = [NSString stringWithFormat:@"%c (%c%c%c)", digit1, digit2, digit3, digit4];
         originalString = [originalString stringByReplacingCharactersInRange:range withString:formattedString];
 
+        // offset
+        if (digitNumberLength > 9) {
+            *offset = startLocation + digitNumberLength + 6;
+        } else if (digitNumberLength > 7) {
+            *offset = startLocation + digitNumberLength + 5;
+        } else if (digitNumberLength > 4) {
+            *offset = startLocation + digitNumberLength + 4;
+        } else {
+            *offset = startLocation + digitNumberLength + 2;
+        }
     }
     
     return originalString;

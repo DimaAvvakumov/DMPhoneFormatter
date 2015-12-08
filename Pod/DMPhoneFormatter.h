@@ -10,6 +10,9 @@
 
 @interface DMPhoneFormatter : NSObject
 
-- (NSString *)autoFormat:(NSString *)phoneNumber;
++ (id)defaultFormatter;
+
+- (NSString *)autoFormat:(NSString *)phoneNumber positionOffset:(NSInteger *)offset;
+- (NSString *) removeGarbageChars: (NSString *)originalString;
 
 @end

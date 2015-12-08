@@ -10,6 +10,8 @@
 
 @interface ViewController ()
 
+@property (weak, nonatomic) IBOutlet UITextField *textField;
+
 @end
 
 @implementation ViewController
@@ -22,6 +24,15 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)action:(id)sender {
+    
+    UITextPosition *startPosition = [self.textField positionFromPosition:[self.textField beginningOfDocument] offset:3];
+    UITextPosition *endPosition = [self.textField endOfDocument];
+    UITextRange *textRange = [self.textField textRangeFromPosition:startPosition toPosition:startPosition];
+    [self.textField setSelectedTextRange:textRange];
+    
 }
 
 @end

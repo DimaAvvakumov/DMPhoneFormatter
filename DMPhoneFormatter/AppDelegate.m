@@ -63,9 +63,10 @@
 
 - (void)format:(NSString *)number {
     DMPhoneFormatter *phoneFormatter = [[DMPhoneFormatter alloc] init];
+    NSInteger offset = 0;
     
     NSLog(@"Number: %@", number);
-    NSLog(@"Frmtdd: %@", [phoneFormatter autoFormat:number]);
+    NSLog(@"Frmtdd: %@", [phoneFormatter autoFormat:number positionOffset:&offset]);
     NSLog(@" --- \n\n");
 }
 
